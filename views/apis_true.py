@@ -188,14 +188,12 @@ class UserInfo(ApiHandler):
 
 
 
-data = open('food.csv').read().strip().split()
-data = data.strip()
-
-
-
 
 class FoodProcessFactor(ApiHandler):
     def get(self):
+        data = open('food.csv').read().strip().split()
+        data = data.strip()
+
         keyword = self.request.get('key')
 
         rows = data.split('\n')

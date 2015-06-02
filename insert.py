@@ -29,30 +29,39 @@ def download(date):
     for item in vegetable.get(date):
         results.append(process_item(item))
 
-    print len(results)
-    for item in fish.get(date):
-        results.append(process_item(item))
+    try:
+        print len(results)
+        for item in fish.get(date):
+            results.append(process_item(item))
+    except:
+        pass
 
-    print len(results)
-    for item in checken.get(date):
-        if u'其他' in item['name']:
-            continue
-        if u'待訂' in item['name']:
-            continue
-        results.append(process_item(item))
+    try:
+        print len(results)
+        for item in checken.get(date):
+            if u'其他' in item['name']:
+                continue
+            if u'待訂' in item['name']:
+                continue
+            results.append(process_item(item))
+    except:
+        pass
 
-    print len(results)
-    for item in pork.get(date):
-        results.append(process_item(item))
-    
-    ndb.put_multi(results)
-    print len(results)
+    try:
+        print len(results)
+        for item in pork.get(date):
+            results.append(process_item(item))
+        
+        ndb.put_multi(results)
+        print len(results)
+    except:
+        pass
 
 
 from datetime import datetime, timedelta, date
 
 def run():
-    time = date(2014,6,1)
+    time = date(2014,12,5)
     today = datetime.now().date()
     while time <= today:
         print time

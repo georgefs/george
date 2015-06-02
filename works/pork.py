@@ -20,6 +20,7 @@ def urlget(url):
 api = 'http://m.coa.gov.tw/OpenData/AnimalTransData.aspx'
 def get_base(date):
     url = api + "?TransDate={}{}".format(date.year-1911, date.strftime("%m%d")) 
+    print url
     content = urlget(url)
     items = sorted(json.loads(content), key=lambda x:x[u'交易日期'])
     data = dict()
@@ -43,22 +44,23 @@ def parse_width(width):
 
 def get(date):
     try:
-        content = urlget('http://shopping.my-fresh.com/%E8%B1%AC%E8%82%89%E9%A1%9E')
+        content = urlget('http://shopping.my-fresh.com/%E5%BF%AB%E6%A8%82%E8%B1%AC')
         body = BeautifulSoup(content)
         products = body.select('.product-item')
         
         wholesale_price, amount = get_base(date)
-    except:
+    except Exception as e:
+        print e
         return
     for product in products:
         item = {}
-        title = product.select('.product-title')[0].text.replace(u'【買新鮮】', '').strip()
+        title = product.select('.product-title')[0].text.replace(u'【買新鮮】', '').replace(u'【快樂豬】', '').strip()
         if u'肉' not in title:
             continue
 
         title = re.sub('\d+.*', '', title)
 
-        width = re.search( '[.\d]+K?g', product.select('.description')[0].text).group()
+        width = re.search( '[.\d]+K?g', product.select('.product-title')[0].text).group()
         
         rate = parse_width(width)
         price = float(product.select('.actual-price')[0].text.replace('$', '') )
@@ -75,4 +77,6 @@ def get(date):
 
         
 
+for i in get(datetime(2014,12,05)):
+    print i['name']
 

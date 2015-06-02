@@ -19,13 +19,13 @@ api = 'http://m.coa.gov.tw/OpenData/AquaticTransData.aspx'
 def get(date):
     url = api + "?TransDate={}{}".format(date.year-1911, date.strftime("%m%d")) 
     content = urlget(url)
-    items = sorted(json.loads(content)['items'], key=lambda x:x[u'魚貨名稱'])
+    items = sorted(json.loads(content), key=lambda x:x[u'魚貨名稱'])
     data = dict()
     for product in groupby(items, lambda x:x[u'魚貨名稱']):
         item = {}
         title, values = product
 
-        if re.search("|".join([u'其他', u'待定', u'智仔', u'烏殼']), title):
+        if re.search("|".join([u'其他', u'待定', u'智仔', u'烏殼', u'萬引']), title):
             print title
             continue
         total_price = 0
@@ -49,5 +49,4 @@ def get(date):
 
 
 
-for item in  get(datetime(2014,6,8)):
-    pass
+
